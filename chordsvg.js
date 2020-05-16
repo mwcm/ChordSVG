@@ -11,10 +11,11 @@ class ChordSVG{
     }
 
     drawChordToCanvas(ele, positions, fingerings) {
-        var canvas = SVG().insertBefore(ele).size(this.params.width, this.params.height);
+        // TODO: make constants
+        var canvas = SVG().insertBefore(ele).size(100, 120);
         canvas.setAttribute('class', 'rendered-chord');
-        var chordObj = ChordBox(canvas).draw(positions, fingerings)
-        return canvas;
+        var chordObj = new ChordBox(canvas).draw(positions, fingerings)
+        // return canvas;
     }
 
 
