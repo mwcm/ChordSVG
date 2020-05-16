@@ -94,8 +94,7 @@ var ChordSVG = (function () {
       const { fretSpacing } = _fretSpacing;
 
       // draw the bridge if there is a note higher than fret 5
-      console.log(positions);
-      if (!positions.some((el) => el != "x" && int(el) > 5)) {
+      if (!Array.from(positions).some((el) => el != "x" && Number(el) > 5)) {
         const fromX = _x;
         const fromY = _y - _metrics.bridgeStrokeWidth;
         _canvas
@@ -136,12 +135,16 @@ var ChordSVG = (function () {
       }
 
       // Draw tuning keys
-      if (_params.showTuning && _tuning.length !== 0) {
-        for (let i = 0; i < Math.min(_numStrings, _tuning.length); i += 1) {
+      if (_params.showTuning && _params.tuning.length !== 0) {
+        for (
+          let i = 0;
+          i < Math.min(_numStrings, _params.tuning.length);
+          i += 1
+        ) {
           DrawText(
             _x + _spacing * i,
             _y + _numFrets * _fretSpacing + _fretSpacing / 12,
-            _tuning[i]
+            _params.tuning[i]
           );
         }
       }
@@ -172,11 +175,12 @@ var ChordSVG = (function () {
 
     var LightUp = function (string, fret, label) {
       const stringNum = _numStrings - string;
-      const shiftPosition =
-        _position === 1 && _positionText === 1 ? _positionText : 0;
+      // const shiftPosition =
+      //   _position === 1 && _positionText === 1 ? _positionText : 0;
 
       const mute = fret === "x";
-      const fretNum = fret === "x" ? 0 : fret - shiftPosition;
+      // const fretNum = fret === "x" ? 0 : fret - shiftPosition;
+      const fretNum = fret === "x" ? 0 : fret;
 
       const x = _x + _spacing * stringNum;
       let y = _y + _fretSpacing * fretNum;
@@ -220,9 +224,11 @@ var ChordSVG = (function () {
 
   var DrawChordToCanvas = function (ele, positions, fingerings) {
     // TODO: make constants
-    var canvas = SVG().addTo(ele).size(100, 120);
-    var chordObj = new ChordBox(canvas).Draw(positions, fingerings);
-    chordObj.setAttribute("class", "rendered-chord");
+    var canvas = SVG().addTo(ele).size(200, 240);
+    ele.setAttribute("class", "rendered-chord");
+    var chordObj = ChordBox(canvas);
+    console.log(chordObj);
+    chordObj.Draw(positions, fingerings);
     // return canvas;
   };
 
