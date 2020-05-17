@@ -157,13 +157,13 @@ var ChordSVG = (function () {
         // Light up string, fret, and optional label.
         if (fingerings[i] != "-") {
           LightUp({
-            string: i + 1,
+            string: i,
             fret: positions[i],
             label: fingerings[i],
           });
         } else {
           LightUp({
-            string: i + 1,
+            string: i,
             fret: positions[i],
           });
         }
@@ -177,7 +177,6 @@ var ChordSVG = (function () {
     };
 
     var LightUp = function ({ string, fret, label }) {
-      //console.log(string, fret, label);
       // const shiftPosition =
       //   _position === 1 && _positionText === 1 ? _positionText : 0;
 
@@ -191,6 +190,7 @@ var ChordSVG = (function () {
       if (fretNum === 0) {
         y -= _metrics.bridgeStrokeWidth;
       }
+      console.log(string, fret);
 
       if (!mute) {
         _canvas
