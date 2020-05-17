@@ -4,7 +4,7 @@ var ChordSVG = (function () {
     var _params = {
       ...{
         numStrings: 6,
-        numFrets: 5,
+        numFrets: 3,
         x: 0,
         y: 0,
         width: 100,
@@ -200,10 +200,10 @@ var ChordSVG = (function () {
           .stroke({ color: _params.strokeColor, width: _params.strokeWidth })
           .fill(fretNum > 0 ? _params.strokeColor : _params.bgColor);
       } else {
-        DrawText(x, y - _fretSpacing, "X");
+        DrawText(x, y - _fretSpacing * 0.6, "X");
       }
 
-      if (label) {
+      if (label && label != "x") {
         const fontSize = _metrics.fontSize * 0.55;
         const textYShift = fontSize * 0.66;
 
