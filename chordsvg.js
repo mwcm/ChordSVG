@@ -41,8 +41,11 @@ var ChordSVG = (function () {
     });
 
     // Size and shift board
-    var _width = _params.width * 0.75;
-    var _height = _params.height * 0.75;
+    var _width = _params.width;
+    var _height = _params.height;
+
+    // var _width = _params.width * 0.75;
+    // var _height = _params.height * 0.75;
 
     // Initialize scaled-spacing
     var _numStrings = _params.numStrings;
@@ -51,8 +54,8 @@ var ChordSVG = (function () {
     var _fretSpacing = _params.height / (_params.numFrets + 2);
 
     // Add room on sides for finger positions on 1. and 6. string
-    var _x = _params.x + _params.width * 0.15 + _spacing / 2;
-    var _y = _params.y + _params.height * 0.15 + _fretSpacing;
+    var _x = _params.x + _params.width * 0.01 + _spacing / 2;
+    var _y = _params.y + _params.height * 0.01 + _fretSpacing;
 
     var _metrics = {
       circleRadius: _width / 20,
@@ -63,7 +66,6 @@ var ChordSVG = (function () {
     };
 
     var DrawText = function (x, y, msg, attrs) {
-      // console.log(x, y, msg, attrs);
       const textAttrs = {
         ...{
           family: _params.fontFamily,
@@ -84,7 +86,6 @@ var ChordSVG = (function () {
     };
 
     var DrawLine = function (x, y, newX, newY) {
-      // console.log(x, y, newX, newY);
       return _canvas.line(0, 0, newX - x, newY - y).move(x, y);
     };
 
@@ -92,8 +93,6 @@ var ChordSVG = (function () {
       if (_params.tuning.length === 0) {
         _fretSpacing = _height / (_numFrets + 1);
       }
-      // const { spacing } = _spacing;
-      // const { fretSpacing } = _fretSpacing;
 
       // draw the bridge if there is a note higher than fret 5
       if (!Array.from(positions).some((el) => el != "x" && Number(el) > 5)) {
@@ -112,7 +111,6 @@ var ChordSVG = (function () {
 
       // Draw strings
       for (let i = 0; i < _numStrings; i += 1) {
-        // console.log(_x, _y, _spacing, _spacing, _numFrets, _fretSpacing);
         DrawLine(
           _x + _spacing * i,
           _y,
@@ -190,7 +188,6 @@ var ChordSVG = (function () {
       if (fretNum === 0) {
         y -= _metrics.bridgeStrokeWidth;
       }
-      console.log(string, fret);
 
       if (!mute) {
         _canvas
@@ -203,11 +200,11 @@ var ChordSVG = (function () {
         DrawText(x, y - _fretSpacing * 0.6, "X");
       }
 
-      if (label && label != "x") {
+      if (label && label != "r") {
         const fontSize = _metrics.fontSize * 0.55;
         const textYShift = fontSize * 0.66;
 
-        DrawText(x, y - _fretSpacing / 2 - textYShift, label, {
+        DrawText(x - 0.5, y - _fretSpacing / 2 - textYShift, label, {
           weight: _params.labelWeight,
           size: fontSize,
         })
@@ -227,7 +224,7 @@ var ChordSVG = (function () {
 
   var DrawChordToCanvas = function (ele, positions, fingerings) {
     // TODO: make constants
-    var canvas = SVG().addTo(ele).size(400, 480);
+    var canvas = SVG().addTo(ele).size(100, 120);
     ele.setAttribute("class", "rendered-chord");
     var chordObj = ChordBox(canvas);
     chordObj.Draw(positions, fingerings);
@@ -235,7 +232,7 @@ var ChordSVG = (function () {
   };
 
   //requires jQuery
-  //example: <chord name="A" positions="X02220" fingers="--222-"></chord>
+  //example: <chord positions="X02220" fingers="--222-"></chord>
   var Replace = function (baseEl) {
     baseEl = baseEl || "body";
 
