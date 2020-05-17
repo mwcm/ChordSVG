@@ -2,12 +2,15 @@
 
 // - double digit frets
 // - calculate + write hand position
+
 // - numFrets needs to be automatically increased proporional to frets spanned
 //   in the positions array
 
 // - write out what is barre'd based on positions & fingerings
 // - constants for height & weight
 //    -> need to add x spacing
+
+// - chord name position / spacing could use work
 // - take in more parameters from <chord> attributes (size/colors/etc.)
 
 var ChordSVG = (function () {
