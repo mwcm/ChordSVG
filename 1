@@ -1,10 +1,7 @@
 // TODO:
 // - take in + write chord names
-// - calculate + write hand position
 // - numFrets needs to be automatically increased proporional to frets spanned
 //   in the positions array
-// - figure out what is barre'd based on positions & fingerings
-// - constants for height & weight
 // - take in more parameters from <chord> attributes (size/colors/etc.)
 
 var ChordSVG = (function () {
@@ -104,13 +101,8 @@ var ChordSVG = (function () {
         _fretSpacing = _height / (_numFrets + 1);
       }
 
-      // skip drawing the bridge if any notes are higher than the # of frets
-      // TODO: write hand position in lieu of bridge
-      if (
-        !Array.from(positions).some(
-          (el) => el != ("x" || "-") && Number(el) > _numFrets
-        )
-      ) {
+      // skip drawing the bridge if there is a note higher than fret
+      if (!Array.from(positions).some((el) => el != "x" && Number(el) > numFrets)) {
         const fromX = _x - 1;
         const fromY = _y - _metrics.bridgeStrokeWidth - 3;
         _canvas
@@ -274,5 +266,7 @@ var ChordSVG = (function () {
     generate: DrawChordToCanvas,
   };
 })();
+
+var chords = ChordSVG;
 
 var chords = ChordSVG;
