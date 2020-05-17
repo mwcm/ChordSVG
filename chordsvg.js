@@ -7,8 +7,8 @@ var ChordSVG = (function () {
         numFrets: 3,
         x: 0,
         y: 0,
-        width: 100,
-        height: 120,
+        width: 200,
+        height: 240,
         strokeWidth: 1,
         showTuning: true,
         defaultColor: "#666",
@@ -224,7 +224,7 @@ var ChordSVG = (function () {
 
   var DrawChordToCanvas = function (ele, positions, fingerings) {
     // TODO: make constants
-    var canvas = SVG().addTo(ele).size(100, 120);
+    var canvas = SVG().addTo(ele).size(200, 240);
     ele.setAttribute("class", "rendered-chord");
     var chordObj = ChordBox(canvas);
     chordObj.Draw(positions, fingerings);
