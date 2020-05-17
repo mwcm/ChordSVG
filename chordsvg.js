@@ -15,6 +15,7 @@ var ChordSVG = (function () {
     var _canvas = canvas;
     var _params = {
       ...{
+        chordName: "",
         numStrings: 6,
         numFrets: 3,
         x: 0,
@@ -51,6 +52,12 @@ var ChordSVG = (function () {
     ["stringWidth", "fretWidth"].forEach((param) => {
       _params[param] = _params[param] || _params.strokeWidth;
     });
+
+    if (_params.chordName == null || typeof _params.chordName == "undefined") {
+      var _chordName = "";
+    } else {
+      var _chordName = _params.chordName;
+    }
 
     // Size and shift board
     var _width = _params.width;
@@ -102,9 +109,19 @@ var ChordSVG = (function () {
       return _canvas.line(0, 0, newX - x, newY - y).move(x, y);
     };
 
+    var DrawName = function (name) {
+      return DrawText(_width / 2, 0, name);
+    };
+
     var CreateImage = function (positions, fingerings) {
       if (_params.tuning.length === 0) {
         _fretSpacing = _height / (_numFrets + 1);
+      }
+
+      //Draw chordName
+      if (_chordName !== null || _chordName.match(/^ *$/) === null) {
+        _y += _spacing / 2.2;
+        DrawName(_chordName);
       }
 
       // skip drawing the bridge if any notes are higher than the # of frets
@@ -198,6 +215,7 @@ var ChordSVG = (function () {
 
       const mute = fret === "x";
       // const fretNum = fret === "x" ? 0 : fret - shiftPosition;
+      // const fretNum = fret === "x" ? 0 : fret - shiftPosition;
       const fretNum = fret === "x" ? 0 : fret;
 
       const x = _x + _spacing * string;
@@ -215,7 +233,7 @@ var ChordSVG = (function () {
           .stroke({ color: _params.strokeColor, width: _params.strokeWidth })
           .fill(fretNum > 0 ? _params.strokeColor : _params.bgColor);
       } else {
-        DrawText(x, y - _fretSpacing * 0.6, "X");
+        DrawText(x, y - _fretSpacing * 0.66, "X");
       }
 
       if (label && label != "r") {
@@ -240,11 +258,14 @@ var ChordSVG = (function () {
     };
   };
 
-  var DrawChordToCanvas = function (ele, positions, fingerings) {
+  var DrawChordSVG = function (ele, name, positions, fingerings) {
     // TODO: use constants here & default params width & height
     var canvas = SVG().addTo(ele).size(200, 240);
     ele.setAttribute("class", "rendered-chord");
-    var chordObj = ChordBox(canvas);
+
+    var params = { chordName: name };
+
+    var chordObj = ChordBox(canvas, params);
     chordObj.Draw(positions, fingerings);
   };
 
@@ -266,15 +287,16 @@ var ChordSVG = (function () {
       var elt = chords[i];
       var positions = elt.getAttribute("positions");
       var fingers = elt.getAttribute("fingers");
+      var name = elt.getAttribute("name");
 
-      DrawChordToCanvas(elt, positions, fingers);
+      DrawChordSVG(elt, name, positions, fingers);
     }
   };
 
   return {
     chord: ChordBox,
     replace: Replace,
-    generate: DrawChordToCanvas,
+    generate: DrawChordSVG,
   };
 })();
 
