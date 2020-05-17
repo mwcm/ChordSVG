@@ -97,11 +97,11 @@ var ChordSVG = (function () {
 
       // draw the bridge if there is a note higher than fret 5
       if (!Array.from(positions).some((el) => el != "x" && Number(el) > 5)) {
-        const fromX = _x;
-        const fromY = _y - _metrics.bridgeStrokeWidth;
+        const fromX = _x - 1;
+        const fromY = _y - _metrics.bridgeStrokeWidth - 3;
         _canvas
-          .rect(_x + _spacing * (_numStrings - 1) - fromX, _y - fromY)
-          .move(fromX, fromY)
+          .rect(1 + _x + _spacing * (_numStrings - 1) - fromX, _y - fromY)
+          .move(fromX, fromY + 3)
           .stroke({ width: 0 })
           .fill(_params.bridgeColor);
       } else {
