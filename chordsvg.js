@@ -1,10 +1,11 @@
 // TODO:
+// - take in + write chord names
+
 // - double digit frets
 // - calculate + write hand position
 // - numFrets needs to be automatically increased proporional to frets spanned
 //   in the positions array
 
-// - take in + write chord names
 // - write out what is barre'd based on positions & fingerings
 // - constants for height & weight
 // - take in more parameters from <chord> attributes (size/colors/etc.)
