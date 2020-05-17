@@ -1,5 +1,4 @@
 // TODO:
-// - take in + write chord names
 
 // - double digit frets
 // - calculate + write hand position
@@ -53,7 +52,11 @@ var ChordSVG = (function () {
       _params[param] = _params[param] || _params.strokeWidth;
     });
 
-    if (_params.chordName == null || typeof _params.chordName == "undefined") {
+    if (
+      _params.chordName == null ||
+      typeof _params.chordName == "undefined" ||
+      _params.chordName.match(/^ *$/)
+    ) {
       var _chordName = "";
     } else {
       var _chordName = _params.chordName;
@@ -75,7 +78,13 @@ var ChordSVG = (function () {
 
     // Add room on sides for finger positions on 1. and 6. string
     var _x = _params.x + _params.width * 0.01 + _spacing / 2;
-    var _y = _params.y + _params.height * 0.01 + _fretSpacing;
+
+    // center chord add more space if name is provided
+    if (_chordName.match(/^ *$/) === null) {
+      var _y = _params.y + _params.height * 0.075 + _fretSpacing;
+    } else {
+      var _y = _params.y + _params.height * 0.01 + _fretSpacing;
+    }
 
     var _metrics = {
       circleRadius: _width / 20,
@@ -118,9 +127,7 @@ var ChordSVG = (function () {
         _fretSpacing = _height / (_numFrets + 1);
       }
 
-      //Draw chordName
-      if (_chordName !== null || _chordName.match(/^ *$/) === null) {
-        _y += _spacing / 2.2;
+      if (_chordName.match(/^ *$/) === null) {
         DrawName(_chordName);
       }
 
