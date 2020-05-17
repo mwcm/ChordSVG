@@ -120,7 +120,7 @@ var ChordSVG = (function () {
     };
 
     var DrawName = function (name) {
-      return DrawText(_width / 2, 0, name);
+      return DrawText(_width / 2 + _spacing / 6, 0, name);
     };
 
     var CreateImage = function (positions, fingerings) {
