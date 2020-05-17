@@ -7,6 +7,7 @@
 
 // - write out what is barre'd based on positions & fingerings
 // - constants for height & weight
+//    -> need to add x spacing
 // - take in more parameters from <chord> attributes (size/colors/etc.)
 
 var ChordSVG = (function () {
@@ -267,7 +268,7 @@ var ChordSVG = (function () {
 
   var DrawChordSVG = function (ele, name, positions, fingerings) {
     // TODO: use constants here & default params width & height
-    var canvas = SVG().addTo(ele).size(200, 240);
+    var canvas = SVG().addTo(ele).size(220, 240);
     ele.setAttribute("class", "rendered-chord");
 
     var params = { chordName: name };
