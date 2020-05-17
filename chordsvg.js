@@ -83,6 +83,7 @@ var ChordSVG = (function () {
     };
 
     var DrawLine = function (x, y, newX, newY) {
+      // console.log(x, y, newX, newY);
       return _canvas.line(0, 0, newX - x, newY - y).move(x, y);
     };
 
@@ -90,15 +91,15 @@ var ChordSVG = (function () {
       if (_params.tuning.length === 0) {
         _fretSpacing = _height / (_numFrets + 1);
       }
-      const { spacing } = _spacing;
-      const { fretSpacing } = _fretSpacing;
+      // const { spacing } = _spacing;
+      // const { fretSpacing } = _fretSpacing;
 
       // draw the bridge if there is a note higher than fret 5
       if (!Array.from(positions).some((el) => el != "x" && Number(el) > 5)) {
         const fromX = _x;
         const fromY = _y - _metrics.bridgeStrokeWidth;
         _canvas
-          .rect(_x + spacing * (_numStrings - 1) - fromX, _y - fromY)
+          .rect(_x + _spacing * (_numStrings - 1) - fromX, _y - fromY)
           .move(fromX, fromY)
           .stroke({ width: 0 })
           .fill(_params.bridgeColor);
@@ -110,11 +111,12 @@ var ChordSVG = (function () {
 
       // Draw strings
       for (let i = 0; i < _numStrings; i += 1) {
+        console.log(_x, _y, _spacing, _spacing, _numFrets, _fretSpacing);
         DrawLine(
-          _x + spacing * i,
+          _x + _spacing * i,
           _y,
-          _x + spacing * i,
-          _y + fretSpacing * _numFrets
+          _x + _spacing * i,
+          _y + _fretSpacing * _numFrets
         ).stroke({
           width: _params.stringWidth,
           color: _params.stringColor,
@@ -125,9 +127,9 @@ var ChordSVG = (function () {
       for (let i = 0; i < _numFrets + 1; i += 1) {
         DrawLine(
           _x,
-          _y + fretSpacing * i,
-          _x + spacing * (_numStrings - 1),
-          _y + fretSpacing * i
+          _y + _fretSpacing * i,
+          _x + _spacing * (_numStrings - 1),
+          _y + _fretSpacing * i
         ).stroke({
           width: _params.fretWidth,
           color: _params.fretColor,
@@ -173,7 +175,7 @@ var ChordSVG = (function () {
       // }
     };
 
-    var LightUp = function (string, fret, label) {
+    var LightUp = function ({ string, fret, label }) {
       const stringNum = _numStrings - string;
       // const shiftPosition =
       //   _position === 1 && _positionText === 1 ? _positionText : 0;
@@ -185,11 +187,16 @@ var ChordSVG = (function () {
       const x = _x + _spacing * stringNum;
       let y = _y + _fretSpacing * fretNum;
 
+      // console.log(_x, _y);
+      // console.log(_spacing, stringNum);
       if (fretNum === 0) {
         y -= _metrics.bridgeStrokeWidth;
       }
 
       if (!mute) {
+        // console.log(_params.circleRadius, _metrics.circleRadius);
+        // console.log(_params.strokeColor, _metrics.circleRadius);
+        // console.log(_params.strokeColor, _params.bgColor);
         _canvas
           .circle()
           .move(x, y - _fretSpacing / 2)
@@ -227,7 +234,6 @@ var ChordSVG = (function () {
     var canvas = SVG().addTo(ele).size(200, 240);
     ele.setAttribute("class", "rendered-chord");
     var chordObj = ChordBox(canvas);
-    console.log(chordObj);
     chordObj.Draw(positions, fingerings);
     // return canvas;
   };
