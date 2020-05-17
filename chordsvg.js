@@ -63,6 +63,7 @@ var ChordSVG = (function () {
     };
 
     var DrawText = function (x, y, msg, attrs) {
+      // console.log(x, y, msg, attrs);
       const textAttrs = {
         ...{
           family: _params.fontFamily,
@@ -111,7 +112,7 @@ var ChordSVG = (function () {
 
       // Draw strings
       for (let i = 0; i < _numStrings; i += 1) {
-        console.log(_x, _y, _spacing, _spacing, _numFrets, _fretSpacing);
+        // console.log(_x, _y, _spacing, _spacing, _numFrets, _fretSpacing);
         DrawLine(
           _x + _spacing * i,
           _y,
@@ -176,7 +177,7 @@ var ChordSVG = (function () {
     };
 
     var LightUp = function ({ string, fret, label }) {
-      const stringNum = _numStrings - string;
+      //console.log(string, fret, label);
       // const shiftPosition =
       //   _position === 1 && _positionText === 1 ? _positionText : 0;
 
@@ -184,19 +185,14 @@ var ChordSVG = (function () {
       // const fretNum = fret === "x" ? 0 : fret - shiftPosition;
       const fretNum = fret === "x" ? 0 : fret;
 
-      const x = _x + _spacing * stringNum;
+      const x = _x + _spacing * string;
       let y = _y + _fretSpacing * fretNum;
 
-      // console.log(_x, _y);
-      // console.log(_spacing, stringNum);
       if (fretNum === 0) {
         y -= _metrics.bridgeStrokeWidth;
       }
 
       if (!mute) {
-        // console.log(_params.circleRadius, _metrics.circleRadius);
-        // console.log(_params.strokeColor, _metrics.circleRadius);
-        // console.log(_params.strokeColor, _params.bgColor);
         _canvas
           .circle()
           .move(x, y - _fretSpacing / 2)
@@ -231,7 +227,7 @@ var ChordSVG = (function () {
 
   var DrawChordToCanvas = function (ele, positions, fingerings) {
     // TODO: make constants
-    var canvas = SVG().addTo(ele).size(200, 240);
+    var canvas = SVG().addTo(ele).size(400, 480);
     ele.setAttribute("class", "rendered-chord");
     var chordObj = ChordBox(canvas);
     chordObj.Draw(positions, fingerings);
