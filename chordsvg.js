@@ -1,19 +1,12 @@
-// TODO:
-
-// - double digit frets
-// - calculate + write hand position
-
-// - numFrets needs to be automatically increased proporional to frets spanned
-//   in the positions array
-
-// - write out what is barre'd based on positions & fingerings
-// - constants for height & weight
-//    -> need to add x spacing
-
-// - chord name position / spacing could use work
-// - take in more parameters from <chord> attributes (size/colors/etc.)
-
 var ChordSVG = (function () {
+
+  if (typeof SVG === "undefined" || SVG === null) {
+    console.error("ChordSVG: SVG.js requirement not satisfied, SVG  is undefined!");
+  }
+  if (typeof $ === 'undefined' || $ === null) {
+    console.error('ChordSVG: JQuery requirement not satisfied, $ is undefined!')
+  }
+
   var ChordBox = function (canvas, params) {
     var _canvas = canvas;
     var _params = {
@@ -63,14 +56,14 @@ var ChordSVG = (function () {
     ) {
       var _chordName = "";
     } else {
-      var _chordName = _params.chordName;
+      var _chordName = String(_params.chordName);
     }
 
     // Size and shift board
     var _width = _params.width;
     var _height = _params.height;
 
-    // seems to be causing problems
+    // revisit
     // var _width = _params.width * 0.75;
     // var _height = _params.height * 0.75;
 
@@ -126,7 +119,40 @@ var ChordSVG = (function () {
       return DrawText(_width / 2 + _spacing / 6, 0, name);
     };
 
+    var ParsePositions = function (positions) {
+      if (
+        positions == null ||
+        typeof positions == "undefined" ||
+        positions.match(/^ *$/)
+      ) {
+        console.warn("invalid positions format %s", positions);
+        return null;
+      }
+
+      if (positions.length > 6) {
+        if (positions.split(" ").length !== 6) {
+          console.warn("invalid positions format %s", positions);
+          return null;
+        }
+        return positions.split(" ");
+      } else if (positions.length === 6) {
+        positions = positions.split("");
+        return positions;
+      } else {
+        console.warn("invalid positions format %s", positions);
+        return null;
+      }
+    };
+
     var CreateImage = function (positions, fingerings) {
+      var parsedPositions = ParsePositions(positions);
+      console.log("parsed positions: %s", parsedPositions);
+
+      if (parsedPositions === null) {
+        console.error("invalid positions, abandoning CreateImage...");
+        return;
+      }
+
       if (_params.tuning.length === 0) {
         _fretSpacing = _height / (_numFrets + 1);
       }
@@ -137,8 +163,9 @@ var ChordSVG = (function () {
 
       // skip drawing the bridge if any notes are higher than the # of frets
       // TODO: write hand position in lieu of bridge
+
       if (
-        !Array.from(positions).some(
+        !parsedPositions.some(
           (el) => el != ("x" || "-") && Number(el) > _numFrets
         )
       ) {
@@ -150,9 +177,10 @@ var ChordSVG = (function () {
           .stroke({ width: 0 })
           .fill(_params.bridgeColor);
       } else {
-        // TODO: how 2 calculate position reliably?
+        // TODO: how 2 calculate lowest fret # to show reliably?
         // Draw position number
-        // _drawText(_x - _spacing / 2 - _spacing * 0.1, _y + _fretSpacing * position, position);
+
+        DrawText(_x + _spacing * _numStrings - _spacing * 0.5, _y, 1);
       }
 
       // Draw strings
@@ -197,18 +225,18 @@ var ChordSVG = (function () {
       }
 
       // Draw chord
-      for (let i = 0; i < positions.length; i += 1) {
+      for (let i = 0; i < parsedPositions.length; i += 1) {
         // Light up string, fret, and optional label.
         if (fingerings[i] != "-") {
           LightUp({
             string: i,
-            fret: positions[i],
+            fret: parsedPositions[i],
             label: fingerings[i],
           });
         } else {
           LightUp({
             string: i,
-            fret: positions[i],
+            fret: parsedPositions[i],
           });
         }
       }
@@ -299,6 +327,8 @@ var ChordSVG = (function () {
       var positions = elt.getAttribute("positions");
       var fingers = elt.getAttribute("fingers");
       var name = elt.getAttribute("name");
+
+      console.log("positions " + positions);
 
       DrawChordSVG(elt, name, positions, fingers);
     }
