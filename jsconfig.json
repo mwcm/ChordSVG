@@ -4,6 +4,6 @@
     "checkJs": true,
     "allowSyntheticDefaultImports": true
   },
-  "exclude": ["node_modules"],
-  "include": ["*"]
+  "include": ["*"],
+  "exclude": ["node_modules"]
 }
