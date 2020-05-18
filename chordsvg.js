@@ -79,13 +79,6 @@ var ChordSVG = (function () {
     // Add room on sides for finger positions on 1. and 6. string
     var _x = _params.x + _params.width * 0.01 + _spacing / 2;
 
-    // center chord add more space if name is provided
-    if (_chordName.match(/^ *$/) === null) {
-      var _y = _params.y + _params.height * 0.075 + _fretSpacing;
-    } else {
-      var _y = _params.y + _params.height * 0.01 + _fretSpacing;
-    }
-
     var _metrics = {
       circleRadius: _width / 20,
       barreRadius: _width / 25,
@@ -93,6 +86,14 @@ var ChordSVG = (function () {
       barShiftX: _width / 28,
       bridgeStrokeWidth: Math.ceil(_height / 36),
     };
+
+    // center chord add more space if name is provided
+    if (_chordName.match(/^ *$/) === null) {
+      var _y = _params.y + _metrics.fontSize * 2;
+    } else {
+      var _y = _params.y + _fretSpacing;
+    }
+
 
     var DrawText = function (x, y, msg, attrs) {
       const textAttrs = {
@@ -119,47 +120,9 @@ var ChordSVG = (function () {
     };
 
     var DrawName = function (name) {
-      return DrawText(_width / 2 + _spacing / 6, 0, name);
+      return DrawText(_width / 2 + _spacing / _numStrings, 0, name);
     };
-
-    var ParsePositions = function (positions) {
-      if (
-        positions == null ||
-        typeof positions == "undefined" ||
-        positions.match(/^ *$/)
-      ) {
-        console.warn("invalid positions format %s", positions);
-        return null;
-      }
-
-      if (positions.length > 6) {
-        if (positions.split(" ").length !== 6) {
-          console.warn("invalid positions format %s", positions);
-          return null;
-        }
-        return positions.split(" ");
-      } else if (positions.length === 6) {
-        positions = positions.split("");
-        return positions;
-      } else {
-        console.warn("invalid positions format %s", positions);
-        return null;
-      }
-    };
-
-    var CreateImage = function (positions, fingerings) {
-      var parsedPositions = ParsePositions(positions);
-      console.log("parsed positions: %s", parsedPositions);
-      if (parsedPositions === null) {
-        console.error("invalid positions, abandoning CreateImage...");
-        return;
-      }
-
-      var usedFrets = parsedPositions
-        .filter((ele) => !isNaN(parseInt(ele)) && parseInt(ele) != 0)
-        .map((x) => parseInt(x));
-      var minFret = Math.min(...usedFrets);
-      var maxFret = Math.max(...usedFrets);
+    var CreateImage = function (positions, fingerings, minFrets) {
 
       if (_params.tuning.length === 0) {
         _fretSpacing = _height / (_numFrets + 1);
@@ -167,27 +130,6 @@ var ChordSVG = (function () {
 
       if (_chordName.match(/^ *$/) === null) {
         DrawName(_chordName);
-      }
-
-      // skip drawing the bridge if any notes are higher than the # of frets
-      if (
-        !parsedPositions.some(
-          (el) => el != ("x" || "-") && Number(el) > _numFrets
-        )
-      ) {
-        const fromX = _x - 1;
-        const fromY = _y - _metrics.bridgeStrokeWidth - 3;
-        _canvas
-          .rect(1 + _x + _spacing * (_numStrings - 1) - fromX, _y - fromY)
-          .move(fromX, fromY + 3)
-          .stroke({ width: 0 })
-          .fill(_params.bridgeColor);
-      } else {
-        // TODO: how 2 calculate lowest fret # to show reliably?
-        //    - wip
-        //    - remember to replace 1 here
-        // Draw position number
-        DrawText(_x + _spacing * _numStrings - _spacing * 0.5, _y, 1);
       }
 
       // Draw strings
@@ -216,6 +158,29 @@ var ChordSVG = (function () {
         });
       }
 
+
+      // skip drawing the bridge if any notes are higher than the # of frets
+      if (
+        !positions.some(
+          (el) => el != ("x" || "-") && Number(el) > _numFrets
+        )
+      ) {
+        const fromX = _x - 1;
+        const fromY = _y - _metrics.bridgeStrokeWidth - 3;
+        _canvas
+          .rect(1 + _x + _spacing * (_numStrings - 1) - fromX, _y - fromY)
+          .move(fromX, fromY + 3)
+          .stroke({ width: 0 })
+          .fill(_params.bridgeColor);
+      } else {
+        // TODO: how 2 calculate lowest fret # to show reliably?
+        //    - wip
+        //    - remember to replace 1 here
+        // Draw position number
+        DrawText(_x + _spacing * _numStrings - _spacing * 0.5, _y, 1);
+      }
+
+
       // Draw tuning keys
       if (_params.showTuning && _params.tuning.length !== 0) {
         for (
@@ -232,18 +197,18 @@ var ChordSVG = (function () {
       }
 
       // Draw chord
-      for (let i = 0; i < parsedPositions.length; i += 1) {
+      for (let i = 0; i < positions.length; i += 1) {
         // Light up string, fret, and optional label.
         if (fingerings[i] != "-") {
           LightUp({
             string: i,
-            fret: parsedPositions[i],
+            fret: positions[i],
             label: fingerings[i],
           });
         } else {
           LightUp({
             string: i,
-            fret: parsedPositions[i],
+            fret: positions[i],
           });
         }
       }
@@ -305,14 +270,29 @@ var ChordSVG = (function () {
   };
 
   var DrawChordSVG = function (ele, name, positions, fingerings) {
-    // TODO: use constants here & default params width & height
-    var canvas = SVG().addTo(ele).size(220, 240);
+
+    var usedFrets = positions
+      .filter((ele) => !isNaN(parseInt(ele)) && parseInt(ele) != 0)
+      .map((x) => parseInt(x));
+    var minFret = Math.min(...usedFrets);
+    var maxFret = Math.max(...usedFrets);
+
+    // adjust numFrets params to show all frets used by chord (min 3 frets shown)
+    var minNumFrets = (maxFret - minFret) + 1;
+    var numFrets = minNumFrets >= 3 ? minNumFrets : 3;
+
+    // TODO: add ability to input in <chord>
+    var height  = 100;
+    var width = 120;
+
+    var canvas = SVG().addTo(ele).size(height, width);
     ele.setAttribute("class", "rendered-chord");
 
-    var params = { chordName: name };
+    var params = { chordName: name, numFrets: numFrets,
+                   height: height, width: width};
 
     var chordObj = ChordBox(canvas, params);
-    chordObj.Draw(positions, fingerings);
+    chordObj.Draw(positions, fingerings, minFret);
   };
 
   //requires jQuery
@@ -328,6 +308,31 @@ var ChordSVG = (function () {
       elt.remove();
     }
 
+
+    var ParsePositions = function (positions) {
+      if (
+        positions == null ||
+        typeof positions == "undefined" ||
+        positions.match(/^ *$/)
+      ) {
+        console.warn("invalid positions format %s", positions);
+        return null;
+      }
+
+      if (positions.length > 6) {
+        if (positions.split(" ").length !== 6) {
+          console.warn("invalid positions format %s", positions);
+          return null;
+        }
+        return positions.split(" ");
+      } else if (positions.length === 6) {
+        return positions.split("");
+      } else {
+        console.warn("invalid positions format %s", positions);
+        return null;
+      }
+    };
+
     var chords = document.getElementsByTagName("chord");
     for (var i = 0; i < chords.length; ++i) {
       var elt = chords[i];
@@ -335,9 +340,15 @@ var ChordSVG = (function () {
       var fingers = elt.getAttribute("fingers");
       var name = elt.getAttribute("name");
 
-      console.log("positions " + positions);
+      var parsedPositions = ParsePositions(positions);
+      console.log("parsed positions: %s", parsedPositions);
+      if (parsedPositions === null) {
+        // TODO: draw error to canvas?
+        console.error("invalid positions, abandoning Draw operation...");
+        return;
+      }
 
-      DrawChordSVG(elt, name, positions, fingers);
+      DrawChordSVG(elt, name, parsedPositions, fingers);
     }
   };
 

@@ -12,3 +12,4 @@
 - chord name position / spacing could use work
 - take in more parameters from <chord> attributes (size/colors/etc.)
 
+- provide option to strictly cohere to provided numFrets?
