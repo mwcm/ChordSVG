@@ -19,8 +19,8 @@ var ChordSVG = (function () {
         numFrets: 3,
         x: 0,
         y: 0,
-        width: 200,
-        height: 240,
+        width: 100,
+        height: 120,
         strokeWidth: 1,
         showTuning: true,
         defaultColor: "#666",
@@ -66,18 +66,15 @@ var ChordSVG = (function () {
     var _width = _params.width;
     var _height = _params.height;
 
-    // revisit
-    // var _width = _params.width * 0.75;
-    // var _height = _params.height * 0.75;
+    //revisit
+    var _width = _params.width * 0.75;
+    var _height = _params.height * 0.75;
 
     // Initialize scaled-spacing
-    var _numStrings = _params.numStrings;
+    var _numStrings = 6;
     var _numFrets = _params.numFrets;
     var _spacing = _params.width / _params.numStrings;
     var _fretSpacing = _params.height / (_params.numFrets + 2);
-
-    // Add room on sides for finger positions on 1. and 6. string
-    var _x = _params.x + _params.width * 0.01 + _spacing / 2;
 
     var _metrics = {
       circleRadius: _width / 20,
@@ -87,12 +84,17 @@ var ChordSVG = (function () {
       bridgeStrokeWidth: Math.ceil(_height / 36),
     };
 
+
+    // Add room on sides for finger positions on 1. and 6. string
+    var _x = _params.x + _params.width * 0.15 + _spacing / 2;
+    var _y = _params.y + _params.height * 0.15 + _fretSpacing;
+
     // center chord add more space if name is provided
-    if (_chordName.match(/^ *$/) === null) {
-      var _y = _params.y + _metrics.fontSize * 2;
-    } else {
-      var _y = _params.y + _fretSpacing;
-    }
+    // if (_chordName.match(/^ *$/) === null) {
+    //   var _y = _params.y + _fretSpacing;
+    // } else {
+    //   var _y = _params.y + _fretSpacing;
+    // }
 
 
     var DrawText = function (x, y, msg, attrs) {
@@ -120,7 +122,8 @@ var ChordSVG = (function () {
     };
 
     var DrawName = function (name) {
-      return DrawText(_width / 2 + _spacing / _numStrings, 0, name);
+      // draw name of chord centered horizontally
+      return DrawText(_x + (_spacing * (_numStrings / 2)) - (_spacing/2), 0, name);
     };
     var CreateImage = function (positions, fingerings, minFrets) {
 
@@ -158,7 +161,6 @@ var ChordSVG = (function () {
         });
       }
 
-
       // skip drawing the bridge if any notes are higher than the # of frets
       if (
         !positions.some(
@@ -179,7 +181,6 @@ var ChordSVG = (function () {
         // Draw position number
         DrawText(_x + _spacing * _numStrings - _spacing * 0.5, _y, 1);
       }
-
 
       // Draw tuning keys
       if (_params.showTuning && _params.tuning.length !== 0) {
@@ -282,8 +283,8 @@ var ChordSVG = (function () {
     var numFrets = minNumFrets >= 3 ? minNumFrets : 3;
 
     // TODO: add ability to input in <chord>
-    var height  = 100;
-    var width = 120;
+    var height  = 120;
+    var width = 100;
 
     var canvas = SVG().addTo(ele).size(height, width);
     ele.setAttribute("class", "rendered-chord");

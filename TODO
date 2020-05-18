@@ -9,7 +9,6 @@
 - constants for height & weight
    -> need to add x spacing
 
-- chord name position / spacing could use work
 - take in more parameters from <chord> attributes (size/colors/etc.)
 
 - provide option to strictly cohere to provided numFrets?
