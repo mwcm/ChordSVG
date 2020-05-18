@@ -1,10 +1,13 @@
 var ChordSVG = (function () {
-
   if (typeof SVG === "undefined" || SVG === null) {
-    console.error("ChordSVG: SVG.js requirement not satisfied, SVG  is undefined!");
+    console.error(
+      "ChordSVG: SVG.js requirement not satisfied, SVG  is undefined!"
+    );
   }
-  if (typeof $ === 'undefined' || $ === null) {
-    console.error('ChordSVG: JQuery requirement not satisfied, $ is undefined!')
+  if (typeof $ === "undefined" || $ === null) {
+    console.error(
+      "ChordSVG: JQuery requirement not satisfied, $ is undefined!"
+    );
   }
 
   var ChordBox = function (canvas, params) {
@@ -147,11 +150,16 @@ var ChordSVG = (function () {
     var CreateImage = function (positions, fingerings) {
       var parsedPositions = ParsePositions(positions);
       console.log("parsed positions: %s", parsedPositions);
-
       if (parsedPositions === null) {
         console.error("invalid positions, abandoning CreateImage...");
         return;
       }
+
+      var usedFrets = parsedPositions
+        .filter((ele) => !isNaN(parseInt(ele)) && parseInt(ele) != 0)
+        .map((x) => parseInt(x));
+      var minFret = Math.min(...usedFrets);
+      var maxFret = Math.max(...usedFrets);
 
       if (_params.tuning.length === 0) {
         _fretSpacing = _height / (_numFrets + 1);
@@ -162,8 +170,6 @@ var ChordSVG = (function () {
       }
 
       // skip drawing the bridge if any notes are higher than the # of frets
-      // TODO: write hand position in lieu of bridge
-
       if (
         !parsedPositions.some(
           (el) => el != ("x" || "-") && Number(el) > _numFrets
@@ -178,8 +184,9 @@ var ChordSVG = (function () {
           .fill(_params.bridgeColor);
       } else {
         // TODO: how 2 calculate lowest fret # to show reliably?
+        //    - wip
+        //    - remember to replace 1 here
         // Draw position number
-
         DrawText(_x + _spacing * _numStrings - _spacing * 0.5, _y, 1);
       }
 
