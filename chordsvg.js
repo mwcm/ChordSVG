@@ -17,6 +17,8 @@ var ChordSVG = (function () {
         chordName: "",
         numStrings: 6,
         numFrets: 3,
+        height: 100,
+        width: 120,
         x: 0,
         y: 0,
         strokeWidth: 1,
@@ -114,7 +116,22 @@ var ChordSVG = (function () {
       // draw name of chord centered horizontally
       return DrawText(_x + (_spacing * (_numStrings / 2)) - (_spacing/2), 0, name);
     };
-    var CreateImage = function (positions, fingerings, minFrets) {
+    var CreateImage = function (positions, fingerings) {
+
+      var usedFrets = positions
+        .filter((ele) => !isNaN(parseInt(ele)) && parseInt(ele) != 0)
+        .map((x) => parseInt(x));
+      var minFret = Math.min(...usedFrets);
+      var maxFret = Math.max(...usedFrets);
+
+      // adjust numFrets params to show all frets used by chord (min 3 frets shown)
+      var minNumFrets = (maxFret - minFret) + 1;
+      var fretsRequired = minNumFrets >= 3 ? minNumFrets : 3;
+
+      if (fretsRequired > _numFrets) {
+        _numFrets = fretsRequired;
+        _fretSpacing = _height / (_numFrets * 2);
+      }
 
       if (_chordName.match(/^ *$/) === null) {
         DrawName(_chordName);
@@ -265,16 +282,6 @@ var ChordSVG = (function () {
 
   var DrawChordSVG = function (ele, name, positions, fingerings) {
 
-    var usedFrets = positions
-      .filter((ele) => !isNaN(parseInt(ele)) && parseInt(ele) != 0)
-      .map((x) => parseInt(x));
-    var minFret = Math.min(...usedFrets);
-    var maxFret = Math.max(...usedFrets);
-
-    // adjust numFrets params to show all frets used by chord (min 3 frets shown)
-    var minNumFrets = (maxFret - minFret) + 1;
-    var numFrets = minNumFrets >= 3 ? minNumFrets : 3;
-
     // TODO: add ability to input in <chord>
     var height  = 120;
     var width = 100;
@@ -282,11 +289,10 @@ var ChordSVG = (function () {
     var canvas = SVG().addTo(ele).size(height, width);
     ele.setAttribute("class", "rendered-chord");
 
-    var params = { chordName: name, numFrets: numFrets,
-                   height: height, width: width};
+    var params = { chordName: name, height: height, width: width};
 
     var chordObj = ChordBox(canvas, params);
-    chordObj.Draw(positions, fingerings, minFret);
+    chordObj.Draw(positions, fingerings);
   };
 
   //requires jQuery
