@@ -182,7 +182,7 @@ var ChordSVG = (function () {
         //    - wip
         //    - remember to replace 1 here
         // Draw position number
-        DrawText(_x + _spacing * _numStrings - _spacing * 0.5, _y, 1);
+        DrawText(_x + _spacing * _numStrings - _spacing * 0.5, _y, minFret);
       }
 
       // Draw tuning keys
@@ -203,16 +203,17 @@ var ChordSVG = (function () {
       // Draw chord
       for (let i = 0; i < positions.length; i += 1) {
         // Light up string, fret, and optional label.
-        if (fingerings[i] != "-") {
+        if (fingerings[i] != "-" && positions[i] != '0' && positions[i] != 'x') {
           LightUp({
             string: i,
-            fret: positions[i],
+            fret: positions[i] - (minFret - 1),
             label: fingerings[i],
           });
         } else {
           LightUp({
             string: i,
             fret: positions[i],
+            label: ""
           });
         }
       }
@@ -234,7 +235,6 @@ var ChordSVG = (function () {
       const x = _x + _spacing * string;
       let y = _y + _fretSpacing * parseInt(fretNum);
 
-      console.log(fretNum, y)
       const fontSize = _metrics.fontSize * 0.55;
       const textYShift = fontSize;
 
