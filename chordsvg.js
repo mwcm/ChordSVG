@@ -19,8 +19,6 @@ var ChordSVG = (function () {
         numFrets: 3,
         x: 0,
         y: 0,
-        width: 100,
-        height: 120,
         strokeWidth: 1,
         showTuning: true,
         defaultColor: "#666",
@@ -68,13 +66,13 @@ var ChordSVG = (function () {
 
     //revisit
     var _width = _params.width * 0.75;
-    var _height = _params.height * 0.75;
+    var _height = _params.height * 0.90;
 
     // Initialize scaled-spacing
     var _numStrings = 6;
     var _numFrets = _params.numFrets;
     var _spacing = _params.width / _params.numStrings;
-    var _fretSpacing = _params.height / (_params.numFrets + 2);
+    var _fretSpacing = _height / (_params.numFrets *2);
 
     var _metrics = {
       circleRadius: _width / 20,
@@ -84,18 +82,9 @@ var ChordSVG = (function () {
       bridgeStrokeWidth: Math.ceil(_height / 36),
     };
 
-
     // Add room on sides for finger positions on 1. and 6. string
     var _x = _params.x + _params.width * 0.15 + _spacing / 2;
-    var _y = _params.y + _params.height * 0.15 + _fretSpacing;
-
-    // center chord add more space if name is provided
-    // if (_chordName.match(/^ *$/) === null) {
-    //   var _y = _params.y + _fretSpacing;
-    // } else {
-    //   var _y = _params.y + _fretSpacing;
-    // }
-
+    var _y = _metrics.fontSize * 3;
 
     var DrawText = function (x, y, msg, attrs) {
       const textAttrs = {
@@ -126,10 +115,6 @@ var ChordSVG = (function () {
       return DrawText(_x + (_spacing * (_numStrings / 2)) - (_spacing/2), 0, name);
     };
     var CreateImage = function (positions, fingerings, minFrets) {
-
-      if (_params.tuning.length === 0) {
-        _fretSpacing = _height / (_numFrets + 1);
-      }
 
       if (_chordName.match(/^ *$/) === null) {
         DrawName(_chordName);
@@ -168,7 +153,7 @@ var ChordSVG = (function () {
         )
       ) {
         const fromX = _x - 1;
-        const fromY = _y - _metrics.bridgeStrokeWidth - 3;
+        const fromY = _y - _metrics.bridgeStrokeWidth -1;
         _canvas
           .rect(1 + _x + _spacing * (_numStrings - 1) - fromX, _y - fromY)
           .move(fromX, fromY + 3)
@@ -222,8 +207,6 @@ var ChordSVG = (function () {
     };
 
     var LightUp = function ({ string, fret, label }) {
-      // const shiftPosition =
-      //   _position === 1 && _positionText === 1 ? _positionText : 0;
 
       const mute = fret === "x";
       // const fretNum = fret === "x" ? 0 : fret - shiftPosition;
@@ -231,21 +214,31 @@ var ChordSVG = (function () {
       const fretNum = fret === "x" ? 0 : fret;
 
       const x = _x + _spacing * string;
-      let y = _y + _fretSpacing * fretNum;
+      let y = _y + _fretSpacing * parseInt(fretNum);
 
-      if (fretNum === 0) {
-        y -= _metrics.bridgeStrokeWidth;
-      }
+      console.log(fretNum, y)
+      const fontSize = _metrics.fontSize * 0.55;
+      const textYShift = fontSize * 0.66;
 
       if (!mute) {
+        if (fretNum == 0) {
         _canvas
           .circle()
-          .move(x, y - _fretSpacing / 2)
+          .move(x, y - _fretSpacing/ 2)
           .radius(_params.circleRadius || _metrics.circleRadius)
           .stroke({ color: _params.strokeColor, width: _params.strokeWidth })
-          .fill(fretNum > 0 ? _params.strokeColor : _params.bgColor);
+          .fill(_params.bgColor);
+        } else {
+        _canvas
+          .circle()
+          .move(x, y - _fretSpacing/ 2)
+          .radius(_params.circleRadius || _metrics.circleRadius)
+          .stroke({ color: _params.strokeColor, width: _params.strokeWidth })
+          .fill(_params.strokeColor);
+        }
       } else {
-        DrawText(x, y - _fretSpacing * 0.66, "X");
+        y -= _metrics.bridgeStrokeWidth;
+        DrawText(x, y - (_fretSpacing / 2) - textYShift * 2, "X");
       }
 
       if (label && label != "r") {
