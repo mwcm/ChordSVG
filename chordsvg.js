@@ -283,8 +283,8 @@ var ChordSVG = (function () {
   var DrawChordSVG = function (ele, name, positions, fingerings) {
 
     // TODO: add ability to input in <chord>
-    var height  = 120;
-    var width = 100;
+    var height  = 240;
+    var width = 200;
 
     var canvas = SVG().addTo(ele).size(height, width);
     ele.setAttribute("class", "rendered-chord");
@@ -344,7 +344,7 @@ var ChordSVG = (function () {
       if (parsedPositions === null) {
         // TODO: draw error to canvas?
         console.error("invalid positions, abandoning Draw operation...");
-        return;
+        continue
       }
 
       DrawChordSVG(elt, name, parsedPositions, fingers);
