@@ -84,7 +84,7 @@ var ChordSVG = (function () {
 
     // Add room on sides for finger positions on 1. and 6. string
     var _x = _params.x + _params.width * 0.15 + _spacing / 2;
-    var _y = _params.y + _params.height * 0.15 + _metrics.fontSize;
+    var _y = _metrics.fontSize * 3;
 
     var DrawText = function (x, y, msg, attrs) {
       const textAttrs = {
@@ -153,10 +153,10 @@ var ChordSVG = (function () {
           (el) => el != ("x" || "-") && Number(el) > _numFrets
         )
       ) {
-        const fromX = _x -1;
+        const fromX = _x - 1;
         const fromY = _y ;
         _canvas
-          .rect(_x + _spacing * (_numStrings - 1) - fromX + 1, _metrics.bridgeStrokeWidth)
+          .rect(_x + _spacing * (_numStrings - 1) - fromX + 1, 5)
           .move(fromX, fromY - _metrics.bridgeStrokeWidth)
           .stroke({ width: 0 })
           .fill(_params.bridgeColor);
@@ -219,13 +219,13 @@ var ChordSVG = (function () {
 
       console.log(fretNum, y)
       const fontSize = _metrics.fontSize * 0.55;
-      const textYShift = fontSize;
+      const textYShift = fontSize * 0.66;
 
       if (!mute) {
         if (fretNum == 0) {
         _canvas
           .circle()
-          .move(x, y - _metrics.bridgeStrokeWidth * 2)
+          .move(x, y)
           .radius(_params.circleRadius || _metrics.circleRadius)
           .stroke({ color: _params.strokeColor, width: _params.strokeWidth })
           .fill(_params.bgColor);
@@ -238,14 +238,14 @@ var ChordSVG = (function () {
           .fill(_params.strokeColor);
         }
       } else {
-        DrawText(x, y - textYShift - _metrics.bridgeStrokeWidth * 2.2, "X");
+        DrawText(x, y, "X");
       }
 
       if (label && label != "r") {
         const fontSize = _metrics.fontSize * 0.55;
         const textYShift = fontSize * 0.66;
 
-        DrawText(x, y - _fretSpacing / 2 - textYShift, label, {
+        DrawText(x - 0.5, y - _fretSpacing / 2 - textYShift, label, {
           weight: _params.labelWeight,
           size: fontSize,
         })
