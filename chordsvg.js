@@ -85,7 +85,7 @@ var ChordSVG = (function () {
     };
 
     // Add room on sides for finger positions on 1. and 6. string
-    var _x = _params.x + _params.width * 0.15 + _spacing / 2;
+    var _x = _params.x + _params.width * 0.15;
     var _y = _params.y + _params.height * 0.15 + _metrics.fontSize;
 
     var DrawText = function (x, y, msg, attrs) {
