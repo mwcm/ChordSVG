@@ -146,6 +146,7 @@ var ChordSVG = (function () {
         });
       }
 
+      // TODO: will need to fix this criteria
       // skip drawing the bridge if any notes are higher than the # of frets
       if (
         !positions.some(
@@ -153,10 +154,10 @@ var ChordSVG = (function () {
         )
       ) {
         const fromX = _x - 1;
-        const fromY = _y - _metrics.bridgeStrokeWidth -1;
+        const fromY = _y ;
         _canvas
-          .rect(1 + _x + _spacing * (_numStrings - 1) - fromX, _y - fromY)
-          .move(fromX, fromY + 3)
+          .rect(_x + _spacing * (_numStrings - 1) - fromX + 1, 5)
+          .move(fromX, fromY - 4)
           .stroke({ width: 0 })
           .fill(_params.bridgeColor);
       } else {
@@ -224,7 +225,7 @@ var ChordSVG = (function () {
         if (fretNum == 0) {
         _canvas
           .circle()
-          .move(x, y - _fretSpacing/ 2)
+          .move(x, y - _metrics.bridgeStrokeWidth * 3)
           .radius(_params.circleRadius || _metrics.circleRadius)
           .stroke({ color: _params.strokeColor, width: _params.strokeWidth })
           .fill(_params.bgColor);
@@ -238,7 +239,7 @@ var ChordSVG = (function () {
         }
       } else {
         y -= _metrics.bridgeStrokeWidth;
-        DrawText(x, y - (_fretSpacing / 2) - textYShift * 2, "X");
+        DrawText(x, y - (_metrics.bridgeStrokeWidth * 3) - textYShift, "X");
       }
 
       if (label && label != "r") {
@@ -301,7 +302,6 @@ var ChordSVG = (function () {
       var elt = renderedChords[0];
       elt.remove();
     }
-
 
     var ParsePositions = function (positions) {
       if (
