@@ -1,6 +1,6 @@
 /*
  * ChordSVG
- * Copyright (C) 2020 Morgan Mitchell [mwcmitchell@gmail.com]
+ * Copyright (C) 2020 Morgan Mitchell
  *
  * Based On:
  * Vex Chords v2 https://github.com/0xfe/vexchords
