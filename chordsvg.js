@@ -39,7 +39,7 @@ var ChordSVG = (function () {
 
     // Setup defaults if not specifically overridden
     [
-      "bridgeColor",
+      "nutColor",
       "stringColor",
       "fretColor",
       "strokeColor",
@@ -81,7 +81,7 @@ var ChordSVG = (function () {
       barreRadius: _width / 25,
       fontSize: _params.fontSize || Math.ceil(_width / 8),
       barShiftX: _width / 28,
-      bridgeStrokeWidth: Math.ceil(_height / 24),
+      nutStrokeWidth: Math.ceil(_height / 24),
     };
 
     // Add room on sides for finger positions on 1. and 6. string
@@ -130,12 +130,12 @@ var ChordSVG = (function () {
       // adjust numFrets params to show all frets used by chord (min 3 frets shown)
       var minNumFrets = maxFret - minFret + 1;
       var fretsRequired = minNumFrets >= 3 ? minNumFrets : 3;
-
       if (fretsRequired > _numFrets) {
         _numFrets = fretsRequired;
         _fretSpacing = _height / (_numFrets * 2);
       }
 
+      // draw name if provided
       if (_chordName.match(/^ *$/) === null) {
         DrawName(_chordName);
       }
@@ -166,8 +166,7 @@ var ChordSVG = (function () {
         });
       }
 
-      // TODO: will need to fix this criteria
-      // skip drawing the bridge if any notes are higher than the # of frets
+      // skip drawing the nut when showing other sections of the fretboard
       if (
         !positions.some((el) => el != ("x" || "-") && Number(el) > _numFrets)
       ) {
@@ -176,16 +175,12 @@ var ChordSVG = (function () {
         _canvas
           .rect(
             _x + _spacing * (_numStrings - 1) - fromX + 1,
-            _metrics.bridgeStrokeWidth
+            _metrics.nutStrokeWidth
           )
-          .move(fromX, fromY - _metrics.bridgeStrokeWidth)
+          .move(fromX, fromY - _metrics.nutStrokeWidth)
           .stroke({ width: 0 })
-          .fill(_params.bridgeColor);
+          .fill(_params.nutColor);
       } else {
-        // TODO: how 2 calculate lowest fret # to show reliably?
-        //    - wip
-        //    - remember to replace 1 here
-        // Draw position number
         DrawText(_x + _spacing * _numStrings - _spacing * 0.5, _y, minFret);
       }
 
@@ -206,18 +201,21 @@ var ChordSVG = (function () {
 
       // Draw chord
       for (let i = 0; i < positions.length; i += 1) {
-        // Light up string, fret, and optional label.
         if (
           fingerings[i] != "-" &&
           positions[i] != "0" &&
           positions[i] != "x"
         ) {
+          // if fingering[i] is a fretted note draw it
+          // to the appropriate fret & string
           LightUp({
             string: i,
             fret: positions[i] - (minFret - 1),
             label: fingerings[i],
           });
         } else {
+          // if fingering[i] is a muted or open note
+          // draw it above the nut o the ap
           LightUp({
             string: i,
             fret: positions[i],
@@ -249,7 +247,7 @@ var ChordSVG = (function () {
         if (fretNum == 0) {
           _canvas
             .circle()
-            .move(x, y - _metrics.bridgeStrokeWidth * 2)
+            .move(x, y - _metrics.nutStrokeWidth * 2)
             .radius(_params.circleRadius || _metrics.circleRadius)
             .stroke({ color: _params.strokeColor, width: _params.strokeWidth })
             .fill(_params.bgColor);
@@ -262,7 +260,7 @@ var ChordSVG = (function () {
             .fill(_params.strokeColor);
         }
       } else {
-        DrawText(x, y - textYShift - _metrics.bridgeStrokeWidth * 2.2, "X");
+        DrawText(x, y - textYShift - _metrics.nutStrokeWidth * 2.2, "X");
       }
 
       if (label && label != "r") {
