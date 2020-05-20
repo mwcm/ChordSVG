@@ -1,3 +1,3 @@
-# chordsvg
+# ChordSVG
 
 requires jquery & SVG.js
