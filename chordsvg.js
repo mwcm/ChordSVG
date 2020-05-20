@@ -269,7 +269,7 @@ var ChordSVG = (function () {
         const fontSize = _metrics.fontSize * 0.55;
         const textYShift = fontSize * 0.66;
 
-        DrawText(x, y - _fretSpacing / 2 - textYShift, label, {
+        DrawText(x - 0.5, y - _fretSpacing / 2 - textYShift, label, {
           weight: _params.labelWeight,
           size: fontSize,
         })
