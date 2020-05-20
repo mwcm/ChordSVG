@@ -1,3 +1,33 @@
+/*
+ * ChordSVG
+ * Copyright (C) 2020 Morgan Mitchell [mwcmitchell@gmail.com]
+ *
+ * Based On:
+ * Vex Chords v2 https://github.com/0xfe/vexchords
+ * Copyright (C) 2019 Mohit Muthanna Cheppudira
+ *
+ * ChordJS https://github.com/acspike/ChordJS
+ * Copyright (C) 2012 Aaron Spike [aaron@ekips.org]
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 var ChordSVG = (function () {
   if (typeof SVG === "undefined" || SVG === null) {
     console.error(
@@ -66,7 +96,7 @@ var ChordSVG = (function () {
     var _width = _params.width;
     var _height = _params.height;
 
-    //revisit
+    // TODO: revisit
     var _width = _params.width * 0.75;
     var _height = _params.height * 0.9;
 
@@ -233,8 +263,6 @@ var ChordSVG = (function () {
 
     var LightUp = function ({ string, fret, label }) {
       const mute = fret === "x";
-      // const fretNum = fret === "x" ? 0 : fret - shiftPosition;
-      // const fretNum = fret === "x" ? 0 : fret - shiftPosition;
       const fretNum = fret === "x" ? 0 : fret;
 
       const x = _x + _spacing * string;
@@ -263,11 +291,10 @@ var ChordSVG = (function () {
         DrawText(x, y - textYShift - _metrics.nutStrokeWidth * 2.2, "X");
       }
 
+      // draw labels
       if (label && label != "r") {
         const fontSize = _metrics.fontSize * 0.55;
         const textYShift = fontSize * 0.66;
-
-        console.log(fontSize, textYShift)
 
         DrawText(x, y - _fretSpacing / 2 - textYShift, label, {
           weight: _params.labelWeight,
@@ -346,7 +373,6 @@ var ChordSVG = (function () {
       var name = elt.getAttribute("name");
 
       var parsedPositions = ParsePositions(positions);
-      console.log("parsed positions: %s", parsedPositions);
       if (parsedPositions === null) {
         // TODO: draw error to canvas?
         console.error("invalid positions, abandoning Draw operation...");
