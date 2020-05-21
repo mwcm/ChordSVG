@@ -34,11 +34,6 @@ var ChordSVG = (function () {
       "ChordSVG: SVG.js requirement not satisfied, SVG  is undefined!"
     );
   }
-  if (typeof $ === "undefined" || $ === null) {
-    console.error(
-      "ChordSVG: JQuery requirement not satisfied, $ is undefined!"
-    );
-  }
 
   var ChordBox = function (canvas, params) {
     var _canvas = canvas;
