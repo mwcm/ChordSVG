@@ -8,12 +8,10 @@ Inspired by [Vexchords](https://github.com/0xfe/vexchords) and [ChordJS](https:/
 ## Usage
 
 
-Include the ChordSVG.js script as well as [SVG.js](https://svgjs.com/) and [JQuery](https://jquery.com/):
+Include the ChordSVG.js script as well as [SVG.js](https://svgjs.com/)
 
 ```
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
-
 <script src="./ChordSVG.js"></script>
 ```
 
