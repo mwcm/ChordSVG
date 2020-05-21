@@ -31,11 +31,8 @@ Then include some `<chord>` elements:
 Finally, include a call to `ChordSVG.replace();`:
 
 ```
-<script type="text/javascript">//<![CDATA[
-  $(document).ready(function(){
+<script type="text/javascript">
   ChordSVG.replace();
-  });
-//]]>
 </script>
 ```
 
