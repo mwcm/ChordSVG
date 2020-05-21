@@ -1,9 +1,0 @@
-- split up CreateImage
-
-- write out what is barre'd based on positions & fingerings
-- take in more parameters from <chord> attributes (size/colors/etc.)
-- better test page
-
-
-maybes
-- provide option to strictly cohere to provided numFrets?
