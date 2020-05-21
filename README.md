@@ -41,3 +41,4 @@ Finally, include a call to `ChordSVG.replace();`:
 ```
 
 Diagrams will be generated corresponding to your `<chord>` elements:
+![image of chord diagrams](https://raw.githubusercontent.com/mwcm/ChordSVG/master/diagrams.png)
