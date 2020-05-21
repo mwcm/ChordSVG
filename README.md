@@ -16,7 +16,7 @@ Include the ChordSVG.js script as well as [SVG.js](https://svgjs.com/)
 ```
 
 
-Then include some `<chord>` elements:
+Add some `<chord>` elements:
 
 ```
 <chord name = "D" positions="xx0232" fingers="---132"></chord>
@@ -26,7 +26,7 @@ Then include some `<chord>` elements:
 ```
 
 
-Finally, include a call to `ChordSVG.replace();`:
+Finally, call `ChordSVG.replace();`:
 
 ```
 <script type="text/javascript">
