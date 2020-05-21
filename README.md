@@ -1,6 +1,7 @@
 # ChordSVG 🎸
 
 Render guitar chord diagrams using [SVG.js](https://svgjs.com/)
+
 Replace `<chord>` elements using [JQuery](https://jquery.com/)
 
 Inspired by [Vexchords](https://github.com/0xfe/vexchords) and [ChordJS](https://github.com/acspike/ChordJS)
