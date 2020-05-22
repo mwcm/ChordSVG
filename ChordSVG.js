@@ -367,6 +367,8 @@ var ChordSVG = (function () {
       var fingers = elt.getAttribute("fingers");
       var name = elt.getAttribute("name");
 
+      // TODO: add width & height
+
       var parsedPositions = ParsePositions(positions);
       if (parsedPositions === null) {
         // TODO: draw error to canvas?
