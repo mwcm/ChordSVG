@@ -7,9 +7,34 @@
 	<script src="./chordsvg.js"></script>
     </head>
     <body>
+	<script type="text/javascript" src="chordList.js"></script>
+	<script type="text/javascript" src="chordCollection.js"></script>
 	<script type="text/javascript">
-	    var chordList = require('./chords.json')
-	    chordList.forEach(chord => console.log(chord))
+            var chordNames = Object.keys(CHORD_COLLECTION)
+
+
+            var drawChord = function(item, section) {
+		if (item) {
+		    var chord = document.createElement('chord')
+		    chord.setAttribute('positions', item['positions'].join(' '))
+		    var fingers = item['fingerings'][0].join('')
+		    chord.setAttribute('fingers', fingers)
+		    section.appendChild(chord)
+
+		}
+	    }
+
+	    var drawChords = function(item, index) {
+		var section = document.createElement('div')
+		document.body.appendChild(section)
+		var header = document.createElement('h1')
+		header.innerHTML += item
+		section.appendChild(header)
+		var chordVariations = CHORD_COLLECTION[item];
+		chordVariations.forEach(variation => drawChord(variation, section))
+	    }
+
+	    chordNames.forEach(drawChords)
 	</script>
 
 	<script type="text/javascript">
