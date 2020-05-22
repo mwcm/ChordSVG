@@ -20,7 +20,7 @@ Add some `<chord>` elements:
 
 ```
 <chord name = "D" positions="xx0232" fingers="---132"></chord>
-<chord name = "A" positions="x07655", fingers="432-1-"> </chord>
+<chord name = "A" positions="x07655", fingers="--3211"> </chord>
 <chord name = "C" positions="x32010" fingers="-32-1-"> </chord>
 <chord name = "Db" positions="9 11 11 10 9 9" fingers="134211"> </chord>
 ```
