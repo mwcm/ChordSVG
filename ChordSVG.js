@@ -41,7 +41,7 @@ var ChordSVG = (function () {
       ...{
         chordName: "",
         numStrings: 6,
-        numFrets: 3,
+        numFrets: 4,
         height: 100,
         width: 120,
         x: 0,
@@ -224,6 +224,7 @@ var ChordSVG = (function () {
         }
       }
 
+      console.log(positions);
       // Draw chord
       for (let i = 0; i < positions.length; i += 1) {
         if (
@@ -235,7 +236,7 @@ var ChordSVG = (function () {
           // to the appropriate fret & string
           LightUp({
             string: i,
-            fret: positions[i] - (minFret - 1),
+            fret: ( minFret >= Math.max(...positions) ?  positions[i]: positions[i] - (minFret - 1)),
             label: fingerings[i],
           });
         } else {
@@ -309,11 +310,7 @@ var ChordSVG = (function () {
     };
   };
 
-  var DrawChordSVG = function (ele, name, positions, fingerings) {
-    // TODO: add ability to input in <chord>
-    var height = 240;
-    var width = 200;
-
+  var DrawChordSVG = function (ele, name, positions, fingerings, height=260, width=200) {
     var canvas = SVG().addTo(ele).size(height, width);
     ele.setAttribute("class", "rendered-chord");
 
