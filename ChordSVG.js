@@ -236,7 +236,7 @@ var ChordSVG = (function () {
           // to the appropriate fret & string
           LightUp({
             string: i,
-            fret: ( minFret >= Math.max(...positions) ?  positions[i]: positions[i] - (minFret - 1)),
+            fret: ( _params.numFrets  >= Math.max(...positions) ?  positions[i] : positions[i] - (minFret - 1)),
             label: fingerings[i],
           });
         } else {
@@ -250,7 +250,7 @@ var ChordSVG = (function () {
         }
       }
 
-      // TODO: Come back to this later, shouldn't have to explicitly provide
+      // TODO: Come back to this later, shouldn't have to explicitly provide barres
       // Draw barres
       // for (let i = 0; i < _barres.length; i += 1) {
       //     _lightBar(_barres[i].fromString, _barres[i].toString, _barres[i].fret);
