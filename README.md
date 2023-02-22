@@ -4,6 +4,8 @@ Render guitar chord diagrams using [SVG.js](https://svgjs.com/)
 
 Inspired by [Vexchords](https://github.com/0xfe/vexchords) and [ChordJS](https://github.com/acspike/ChordJS)
 
+TODO:
+- barre chords
 
 ## Usage
 
@@ -36,6 +38,3 @@ Finally, call `ChordSVG.replace();`:
 
 Diagrams will be generated corresponding to your `<chord>` elements:
 ![image of chord diagrams](https://raw.githubusercontent.com/mwcm/ChordSVG/master/diagrams.png)
-
-TODO:
-- barre chords
