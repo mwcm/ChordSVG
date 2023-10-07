@@ -5,7 +5,7 @@ Render guitar chord diagrams using [SVG.js](https://svgjs.com/)
 Inspired by [Vexchords](https://github.com/0xfe/vexchords) and [ChordJS](https://github.com/acspike/ChordJS)
 
 TODO:
-- barre chords
+- display barre chords as lines
 
 ## Usage
 
